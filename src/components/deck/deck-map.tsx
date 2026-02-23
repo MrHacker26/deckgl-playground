@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import DeckGL from '@deck.gl/react'
 import { MapView } from '@deck.gl/core'
 import Map from 'react-map-gl/maplibre'
@@ -46,6 +46,8 @@ export function DeckMap({
     [],
   )
 
+  const mapView = useMemo(() => new MapView({ repeat: true }), [])
+
   return (
     <div className="relative h-screen w-screen">
       <DeckGL
@@ -55,7 +57,7 @@ export function DeckMap({
         onViewStateChange={handleViewStateChange}
         onHover={onHover}
         onClick={onClick}
-        views={new MapView({ repeat: true })}
+        views={mapView}
       >
         <Map mapStyle={mapStyle} />
       </DeckGL>

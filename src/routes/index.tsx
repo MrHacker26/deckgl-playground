@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { BaseButton, Button } from '@/components/ui/button'
 import { motion } from 'motion/react'
-import { CircleDot, Flame, Box } from 'lucide-react'
+import { CircleDot, Flame, Box, Spline } from 'lucide-react'
 import ExampleCard from '@/components/example-card'
 
 export const Route = createFileRoute('/')({
@@ -17,6 +17,15 @@ const EXAMPLES = [
     path: '/examples/scatterplot',
     tag: 'Points Rendering',
     icon: <CircleDot className="size-6" />,
+  },
+  {
+    id: 'arc',
+    title: 'Arc Layer',
+    description:
+      'Visualize connections between cities with animated curved arcs across India.',
+    path: '/examples/arc',
+    tag: 'Connections',
+    icon: <Spline className="size-6" />,
   },
   {
     id: 'heatmap',

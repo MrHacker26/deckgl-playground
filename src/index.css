@@ -196,6 +196,6 @@
 
 @layer utilities {
   .glass {
-    @apply bg-card/80 border border-border backdrop-blur-sm shadow-lg;
+    @apply bg-card/80 border-border border shadow-lg backdrop-blur-sm;
   }
 }

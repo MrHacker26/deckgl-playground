@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ExamplesIndexRouteImport } from './routes/examples/index'
 import { Route as ExamplesScatterplotRouteImport } from './routes/examples/scatterplot'
+import { Route as ExamplesArcRouteImport } from './routes/examples/arc'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,33 +29,47 @@ const ExamplesScatterplotRoute = ExamplesScatterplotRouteImport.update({
   path: '/examples/scatterplot',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExamplesArcRoute = ExamplesArcRouteImport.update({
+  id: '/examples/arc',
+  path: '/examples/arc',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/examples/arc': typeof ExamplesArcRoute
   '/examples/scatterplot': typeof ExamplesScatterplotRoute
   '/examples/': typeof ExamplesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/examples/arc': typeof ExamplesArcRoute
   '/examples/scatterplot': typeof ExamplesScatterplotRoute
   '/examples': typeof ExamplesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/examples/arc': typeof ExamplesArcRoute
   '/examples/scatterplot': typeof ExamplesScatterplotRoute
   '/examples/': typeof ExamplesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/examples/scatterplot' | '/examples/'
+  fullPaths: '/' | '/examples/arc' | '/examples/scatterplot' | '/examples/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/examples/scatterplot' | '/examples'
-  id: '__root__' | '/' | '/examples/scatterplot' | '/examples/'
+  to: '/' | '/examples/arc' | '/examples/scatterplot' | '/examples'
+  id:
+    | '__root__'
+    | '/'
+    | '/examples/arc'
+    | '/examples/scatterplot'
+    | '/examples/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ExamplesArcRoute: typeof ExamplesArcRoute
   ExamplesScatterplotRoute: typeof ExamplesScatterplotRoute
   ExamplesIndexRoute: typeof ExamplesIndexRoute
 }
@@ -82,11 +97,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExamplesScatterplotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/examples/arc': {
+      id: '/examples/arc'
+      path: '/examples/arc'
+      fullPath: '/examples/arc'
+      preLoaderRoute: typeof ExamplesArcRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ExamplesArcRoute: ExamplesArcRoute,
   ExamplesScatterplotRoute: ExamplesScatterplotRoute,
   ExamplesIndexRoute: ExamplesIndexRoute,
 }

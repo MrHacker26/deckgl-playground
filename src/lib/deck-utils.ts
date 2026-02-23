@@ -36,6 +36,13 @@ export const VIEW_STATES = {
     pitch: 0,
     bearing: 0,
   },
+  india: {
+    longitude: 82.0,
+    latitude: 22.0,
+    zoom: 4.5,
+    pitch: 0,
+    bearing: 0,
+  },
   uttarakhand: {
     longitude: 79.0193,
     latitude: 30.0668,
@@ -74,4 +81,42 @@ export function generateRandomPoints(
     ] as [number, number],
     value: Math.random() * 100,
   }))
+}
+
+export const CITIES = [
+  { name: 'Delhi', coordinates: [77.1025, 28.7041] as [number, number] },
+  { name: 'Mumbai', coordinates: [72.8777, 19.076] as [number, number] },
+  { name: 'Bangalore', coordinates: [77.5946, 12.9716] as [number, number] },
+  { name: 'Kolkata', coordinates: [88.3639, 22.5726] as [number, number] },
+  { name: 'Chennai', coordinates: [80.2707, 13.0827] as [number, number] },
+  { name: 'Hyderabad', coordinates: [78.4867, 17.385] as [number, number] },
+  { name: 'Pune', coordinates: [73.8567, 18.5204] as [number, number] },
+  { name: 'Ahmedabad', coordinates: [72.5714, 23.0225] as [number, number] },
+  { name: 'Jaipur', coordinates: [75.7873, 26.9124] as [number, number] },
+  { name: 'Lucknow', coordinates: [80.9462, 26.8467] as [number, number] },
+  { name: 'Dehradun', coordinates: [78.0322, 30.3165] as [number, number] },
+]
+
+export type ArcData = {
+  source: [number, number]
+  target: [number, number]
+  sourceName: string
+  targetName: string
+  value: number
+}
+
+export function generateArcs(count: number): ArcData[] {
+  const arcs: ArcData[] = []
+  for (let i = 0; i < CITIES.length; i++) {
+    for (let j = i + 1; j < CITIES.length; j++) {
+      arcs.push({
+        source: CITIES[i].coordinates,
+        target: CITIES[j].coordinates,
+        sourceName: CITIES[i].name,
+        targetName: CITIES[j].name,
+        value: Math.random() * 100,
+      })
+    }
+  }
+  return arcs.sort((a, b) => b.value - a.value).slice(0, count)
 }

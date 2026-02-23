@@ -1,5 +1,5 @@
-import * as React from 'react'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { AnimatedBackground } from '@/components/animated-background'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -7,9 +7,9 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <React.Fragment>
-      <div className="text-2xl font-bold">Deck.gl Playground</div>
+    <>
+      <AnimatedBackground />
       <Outlet />
-    </React.Fragment>
+    </>
   )
 }

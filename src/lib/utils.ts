@@ -9,3 +9,7 @@ export type WithBasicProps<T> = T & {
   className?: string
   style?: React.CSSProperties
 }
+
+export function range(num: number) {
+  return Array.from({ length: num }, (_, index) => index)
+}

@@ -3,6 +3,7 @@ import { BaseButton, Button } from '@/components/ui/button'
 import { motion } from 'motion/react'
 import { CircleDot, Flame, Box, Spline } from 'lucide-react'
 import ExampleCard from '@/components/example-card'
+import GradientText from '@/components/ui/gradient-text'
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
@@ -62,18 +63,18 @@ function RouteComponent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-20 text-center"
+          className="mb-20 space-y-6 text-center"
         >
-          <div className="text-foreground mb-6 text-5xl font-bold tracking-tight md:text-6xl">
+          <GradientText className="text-5xl font-bold md:text-7xl">
             Deck.gl Playground
-          </div>
+          </GradientText>
 
           <div className="text-muted-foreground mx-auto max-w-2xl text-lg md:text-xl">
             GPU-accelerated geospatial rendering experiments focused on
             performance benchmarking and large-scale dataset visualization.
           </div>
 
-          <div className="mt-8 flex justify-center gap-4">
+          <div className="flex justify-center gap-4">
             <Button size="lg">Explore Examples</Button>
             <BaseButton variant="outline" size="lg" asChild>
               <a

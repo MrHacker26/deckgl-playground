@@ -5,6 +5,7 @@ import { CircleDot, Flame, Box, Spline, Telescope } from 'lucide-react'
 import ExampleCard from '@/components/example-card'
 import GradientText from '@/components/ui/gradient-text'
 import { LogoIcon } from '@/components/ui/logo'
+import { Navbar } from '@/components/navbar'
 import { GithubIcon } from '@/components/ui/icons'
 
 export const Route = createFileRoute('/')({
@@ -59,7 +60,8 @@ const EXAMPLES = [
 
 function RouteComponent() {
   return (
-    <div className="min-h-screen px-6 py-16">
+    <div className="min-h-screen px-6 pt-24 pb-16">
+      <Navbar />
       <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

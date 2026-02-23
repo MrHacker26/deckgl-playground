@@ -1,17 +1,15 @@
-import * as React from "react";
-import { Outlet, createRootRoute } from "@tanstack/react-router";
+import * as React from 'react'
+import { Outlet, createRootRoute } from '@tanstack/react-router'
 
 export const Route = createRootRoute({
   component: RootComponent,
-});
+})
 
 function RootComponent() {
   return (
     <React.Fragment>
-      <div>
-        <h1>Deck.gl Playground</h1>
-      </div>
+      <div className="text-2xl font-bold">Deck.gl Playground</div>
       <Outlet />
     </React.Fragment>
-  );
+  )
 }

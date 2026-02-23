@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { BaseButton, Button } from '@/components/ui/button'
 import { motion } from 'motion/react'
-import { CircleDot, Flame, Box, Spline } from 'lucide-react'
+import { CircleDot, Flame, Box, Spline, Telescope } from 'lucide-react'
 import ExampleCard from '@/components/example-card'
 import GradientText from '@/components/ui/gradient-text'
+import { GithubIcon } from '@/components/ui/icons'
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
@@ -75,13 +76,16 @@ function RouteComponent() {
           </div>
 
           <div className="flex justify-center gap-4">
-            <Button size="lg">Explore Examples</Button>
+            <Button size="lg" icon={<Telescope />}>
+              Explore Examples
+            </Button>
             <BaseButton variant="outline" size="lg" asChild>
               <a
                 href="https://github.com/MrHacker26/deckgl-playground"
                 target="_blank"
                 rel="noopener noreferrer"
               >
+                <GithubIcon className="mr-2 size-4" />
                 View on GitHub
               </a>
             </BaseButton>

@@ -4,6 +4,7 @@ import { motion } from 'motion/react'
 import { CircleDot, Flame, Box, Spline, Telescope } from 'lucide-react'
 import ExampleCard from '@/components/example-card'
 import GradientText from '@/components/ui/gradient-text'
+import { LogoIcon } from '@/components/ui/logo'
 import { GithubIcon } from '@/components/ui/icons'
 
 export const Route = createFileRoute('/')({
@@ -66,6 +67,9 @@ function RouteComponent() {
           transition={{ duration: 0.6 }}
           className="mb-20 space-y-6 text-center"
         >
+          <div className="flex justify-center">
+            <LogoIcon size={72} className="flex justify-center" />
+          </div>
           <GradientText className="text-5xl font-bold md:text-7xl">
             Deck.gl Playground
           </GradientText>

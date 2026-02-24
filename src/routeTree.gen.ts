@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ExamplesIndexRouteImport } from './routes/examples/index'
+import { Route as ExamplesTripsRouteImport } from './routes/examples/trips'
 import { Route as ExamplesScatterplotRouteImport } from './routes/examples/scatterplot'
 import { Route as ExamplesArcRouteImport } from './routes/examples/arc'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const ExamplesIndexRoute = ExamplesIndexRouteImport.update({
   id: '/examples/',
   path: '/examples/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamplesTripsRoute = ExamplesTripsRouteImport.update({
+  id: '/examples/trips',
+  path: '/examples/trips',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExamplesScatterplotRoute = ExamplesScatterplotRouteImport.update({
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/examples/arc': typeof ExamplesArcRoute
   '/examples/scatterplot': typeof ExamplesScatterplotRoute
+  '/examples/trips': typeof ExamplesTripsRoute
   '/examples/': typeof ExamplesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/examples/arc': typeof ExamplesArcRoute
   '/examples/scatterplot': typeof ExamplesScatterplotRoute
+  '/examples/trips': typeof ExamplesTripsRoute
   '/examples': typeof ExamplesIndexRoute
 }
 export interface FileRoutesById {
@@ -52,18 +60,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/examples/arc': typeof ExamplesArcRoute
   '/examples/scatterplot': typeof ExamplesScatterplotRoute
+  '/examples/trips': typeof ExamplesTripsRoute
   '/examples/': typeof ExamplesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/examples/arc' | '/examples/scatterplot' | '/examples/'
+  fullPaths:
+    | '/'
+    | '/examples/arc'
+    | '/examples/scatterplot'
+    | '/examples/trips'
+    | '/examples/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/examples/arc' | '/examples/scatterplot' | '/examples'
+  to:
+    | '/'
+    | '/examples/arc'
+    | '/examples/scatterplot'
+    | '/examples/trips'
+    | '/examples'
   id:
     | '__root__'
     | '/'
     | '/examples/arc'
     | '/examples/scatterplot'
+    | '/examples/trips'
     | '/examples/'
   fileRoutesById: FileRoutesById
 }
@@ -71,6 +91,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExamplesArcRoute: typeof ExamplesArcRoute
   ExamplesScatterplotRoute: typeof ExamplesScatterplotRoute
+  ExamplesTripsRoute: typeof ExamplesTripsRoute
   ExamplesIndexRoute: typeof ExamplesIndexRoute
 }
 
@@ -88,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/examples'
       fullPath: '/examples/'
       preLoaderRoute: typeof ExamplesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/examples/trips': {
+      id: '/examples/trips'
+      path: '/examples/trips'
+      fullPath: '/examples/trips'
+      preLoaderRoute: typeof ExamplesTripsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/examples/scatterplot': {
@@ -111,6 +139,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExamplesArcRoute: ExamplesArcRoute,
   ExamplesScatterplotRoute: ExamplesScatterplotRoute,
+  ExamplesTripsRoute: ExamplesTripsRoute,
   ExamplesIndexRoute: ExamplesIndexRoute,
 }
 export const routeTree = rootRouteImport

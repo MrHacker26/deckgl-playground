@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { TripsLayer } from '@deck.gl/geo-layers'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronLeftIcon, PauseIcon, PlayIcon } from 'lucide-react'
+import { PauseIcon, PlayIcon } from 'lucide-react'
 
 import { DeckMap } from '@/components/deck/deck-map'
 import {
@@ -12,7 +12,7 @@ import {
 } from '@/lib/deck-utils'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
-import { Label } from '@/components/ui/label'
+import { ExamplePanel, SliderField } from '@/components/example-panel'
 
 export const Route = createFileRoute('/examples/trips')({
   component: TripsExamplePage,
@@ -25,8 +25,6 @@ function formatSimTime(seconds: number) {
 }
 
 function TripsExamplePage() {
-  const navigate = useNavigate()
-
   const [settings, setSettings] = useState({
     tripCount: 200,
     trailLength: 120,
@@ -94,70 +92,37 @@ function TripsExamplePage() {
       showStyleSwitcher
       showPerformancePanel
     >
-      <div className="absolute top-4 left-4 flex flex-col gap-2">
-        <Button
-          size="sm"
-          variant="outline"
-          icon={<ChevronLeftIcon />}
-          className="glass w-fit"
-          onClick={() => {
-            navigate({ to: '/' })
+      <ExamplePanel title="Trip Layer">
+        <SliderField
+          label={`Trips: ${tripCount}`}
+          min={50}
+          max={500}
+          step={50}
+          value={tripCount}
+          onChange={(value) => {
+            setSettings((setting) => ({ ...setting, tripCount: value }))
           }}
-        >
-          Back
-        </Button>
-
-        <div className="glass w-56 space-y-4 rounded-lg p-4 sm:w-64">
-          <div className="text-card-foreground text-lg font-semibold">
-            Trip Layer
-          </div>
-
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <Label className="text-muted-foreground">
-                Trips: {tripCount}
-              </Label>
-              <Slider
-                min={50}
-                max={500}
-                step={50}
-                value={[tripCount]}
-                onValueChange={([v]) =>
-                  setSettings((s) => ({ ...s, tripCount: v }))
-                }
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-muted-foreground">
-                Trail Length: {trailLength}s
-              </Label>
-              <Slider
-                min={20}
-                max={400}
-                step={10}
-                value={[trailLength]}
-                onValueChange={([v]) =>
-                  setSettings((s) => ({ ...s, trailLength: v }))
-                }
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-muted-foreground">Speed: {speed}x</Label>
-              <Slider
-                min={1}
-                max={20}
-                step={1}
-                value={[speed]}
-                onValueChange={([v]) =>
-                  setSettings((s) => ({ ...s, speed: v }))
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+        />
+        <SliderField
+          label={`Trail Length: ${trailLength}s`}
+          min={20}
+          max={400}
+          step={10}
+          value={trailLength}
+          onChange={(value) => {
+            setSettings((setting) => ({ ...setting, trailLength: value }))
+          }}
+        />
+        <SliderField
+          label={`Speed: ${speed}x`}
+          min={1}
+          max={20}
+          value={speed}
+          onChange={(value) => {
+            setSettings((setting) => ({ ...setting, speed: value }))
+          }}
+        />
+      </ExamplePanel>
 
       <div className="absolute bottom-20 left-1/2 -translate-x-1/2">
         <div className="glass flex items-center gap-3 rounded-full px-4 py-2">

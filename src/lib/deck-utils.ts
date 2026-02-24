@@ -128,8 +128,6 @@ export function generateArcs(count: number): ArcData[] {
   return arcs.sort((a, b) => b.value - a.value).slice(0, count)
 }
 
-// ─── Trips ────────────────────────────────────────────────────────────────────
-
 export const LOOP_LENGTH = 1800 // simulation seconds (30-min loop)
 
 export type TripData = {
@@ -160,7 +158,7 @@ export function generateTrips(count: number): TripData[] {
 
   const maxDuration = 400
 
-  return Array.from({ length: count }, (_, i) => {
+  return range(count).map((i) => {
     const startLng = lerp(bounds.minLng, bounds.maxLng, Math.random())
     const startLat = lerp(bounds.minLat, bounds.maxLat, Math.random())
     const endLng = lerp(bounds.minLng, bounds.maxLng, Math.random())

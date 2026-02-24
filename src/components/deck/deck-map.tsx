@@ -4,8 +4,10 @@ import { MapView } from '@deck.gl/core'
 import Map from 'react-map-gl/maplibre'
 import type { MapViewState, PickingInfo } from '@deck.gl/core'
 import type { Layer } from '@deck.gl/core'
+import { ActivityIcon } from 'lucide-react'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { cn } from '@/lib/utils'
 import type { WithBasicProps } from '@/lib/utils'
 import { MAP_STYLES } from '@/lib/deck-utils'
 import { MapStyleSwitcher, type MapStyleKey } from './map-style-switcher'
@@ -54,6 +56,7 @@ export function DeckMap({
 
   const [activeStyleKey, setActiveStyleKey] = useState<MapStyleKey>('dark')
   const [metrics, setMetrics] = useState<Metrics>(DEFAULT_METRICS)
+  const [showPanelMobile, setShowPanelMobile] = useState(false)
 
   // FPS tracking refs
   const fpsRef = useRef({
@@ -151,12 +154,29 @@ export function DeckMap({
       </DeckGL>
       {children}
       {showPerformancePanel ? (
-        <div className="absolute top-4 right-4">
-          <PerformancePanel metrics={metrics} layerCount={layers.length} />
-        </div>
+        <>
+          <button
+            className="glass absolute top-4 right-4 rounded-lg p-1.5 sm:hidden"
+            onClick={() => {
+              setShowPanelMobile((value) => !value)
+            }}
+            aria-label="Toggle performance panel"
+          >
+            <ActivityIcon className="size-4" />
+          </button>
+          <div
+            className={cn(
+              'absolute top-14 right-4 sm:top-4',
+              showPanelMobile ? 'block' : 'hidden',
+              'sm:block',
+            )}
+          >
+            <PerformancePanel metrics={metrics} layerCount={layers.length} />
+          </div>
+        </>
       ) : null}
       {showStyleSwitcher ? (
-        <div className="absolute right-4 bottom-8">
+        <div className="absolute right-4 bottom-4">
           <MapStyleSwitcher
             value={activeStyleKey}
             onChange={setActiveStyleKey}

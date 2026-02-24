@@ -107,7 +107,7 @@ function TripsExamplePage() {
           Back
         </Button>
 
-        <div className="glass w-64 space-y-4 rounded-lg p-4">
+        <div className="glass w-56 space-y-4 rounded-lg p-4 sm:w-64">
           <div className="text-card-foreground text-lg font-semibold">
             Trip Layer
           </div>
@@ -159,7 +159,7 @@ function TripsExamplePage() {
         </div>
       </div>
 
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2">
         <div className="glass flex items-center gap-3 rounded-full px-4 py-2">
           <Button
             onClick={() => {
@@ -174,7 +174,7 @@ function TripsExamplePage() {
             }
           />
 
-          <div className="w-48">
+          <div className="w-32 sm:w-48">
             <Slider
               min={0}
               max={LOOP_LENGTH}

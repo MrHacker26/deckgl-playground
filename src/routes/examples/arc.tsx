@@ -55,7 +55,7 @@ function ArcExamplePage() {
         >
           Back
         </Button>
-        <div className="glass w-64 space-y-4 rounded-lg p-4">
+        <div className="glass w-56 space-y-4 rounded-lg p-4 sm:w-64">
           <div className="text-card-foreground text-lg font-semibold">
             Arc Layer
           </div>

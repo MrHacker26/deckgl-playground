@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DeckGL from '@deck.gl/react'
 import { MapView } from '@deck.gl/core'
 import Map from 'react-map-gl/maplibre'
@@ -9,6 +9,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import type { WithBasicProps } from '@/lib/utils'
 import { MAP_STYLES } from '@/lib/deck-utils'
 import { MapStyleSwitcher, type MapStyleKey } from './map-style-switcher'
+import { PerformancePanel, type Metrics } from './performance-panel'
 
 type DeckMapProps = WithBasicProps<{
   initialViewState?: Partial<MapViewState>
@@ -17,6 +18,7 @@ type DeckMapProps = WithBasicProps<{
   onClick?: (info: PickingInfo) => void
   mapStyle?: string
   showStyleSwitcher?: boolean
+  showPerformancePanel?: boolean
   children?: React.ReactNode
 }>
 
@@ -28,6 +30,13 @@ const INITIAL_VIEW_STATE: MapViewState = {
   bearing: 0,
 }
 
+const DEFAULT_METRICS: Metrics = {
+  fps: 0,
+  renderTime: 0,
+  framesRedrawn: 0,
+  idle: true,
+}
+
 export function DeckMap({
   initialViewState = INITIAL_VIEW_STATE,
   layers = [],
@@ -35,6 +44,7 @@ export function DeckMap({
   onClick,
   mapStyle = MAP_STYLES.dark,
   showStyleSwitcher = false,
+  showPerformancePanel = false,
   children,
 }: DeckMapProps) {
   const [viewState, setViewState] = useState<MapViewState>({
@@ -43,6 +53,26 @@ export function DeckMap({
   } as MapViewState)
 
   const [activeStyleKey, setActiveStyleKey] = useState<MapStyleKey>('dark')
+  const [metrics, setMetrics] = useState<Metrics>(DEFAULT_METRICS)
+
+  // FPS tracking refs
+  const fpsRef = useRef({
+    windowStart: null as number | null,
+    windowFrameCount: 0,
+    frameTimes: [] as number[],
+    lastFrame: null as number | null,
+    totalFrames: 0,
+    idleTimer: null as ReturnType<typeof setTimeout> | null,
+  })
+
+  useEffect(() => {
+    const fps = fpsRef.current
+    return () => {
+      if (fps.idleTimer) {
+        clearTimeout(fps.idleTimer)
+      }
+    }
+  }, [])
 
   const resolvedMapStyle = showStyleSwitcher
     ? MAP_STYLES[activeStyleKey]
@@ -54,6 +84,54 @@ export function DeckMap({
     },
     [],
   )
+
+  const handleAfterRender = useCallback(() => {
+    if (!showPerformancePanel) {
+      return
+    }
+    const now = performance.now()
+    const fps = fpsRef.current
+
+    // Seed refs on first render
+    if (fps.windowStart === null || fps.lastFrame === null) {
+      fps.windowStart = now
+      fps.lastFrame = now
+      return
+    }
+
+    // Per-frame render time (rolling 60-frame average)
+    fps.frameTimes.push(now - fps.lastFrame)
+    if (fps.frameTimes.length > 60) {
+      fps.frameTimes.shift()
+    }
+    fps.lastFrame = now
+    fps.totalFrames++
+    fps.windowFrameCount++
+
+    // FPS = renders counted in the last 1-second window
+    const elapsed = now - fps.windowStart
+    if (elapsed >= 1000) {
+      const currentFps = (fps.windowFrameCount / elapsed) * 1000
+      const avgRenderTime =
+        fps.frameTimes.reduce((a, b) => a + b, 0) / fps.frameTimes.length
+      setMetrics({
+        fps: currentFps,
+        renderTime: avgRenderTime,
+        framesRedrawn: fps.totalFrames,
+        idle: false,
+      })
+      fps.windowFrameCount = 0
+      fps.windowStart = now
+    }
+
+    // Mark idle after 300ms with no renders
+    if (fps.idleTimer) {
+      clearTimeout(fps.idleTimer)
+    }
+    fps.idleTimer = setTimeout(() => {
+      setMetrics((prev) => ({ ...prev, idle: true }))
+    }, 300)
+  }, [showPerformancePanel])
 
   const mapView = useMemo(() => new MapView({ repeat: true }), [])
 
@@ -67,10 +145,16 @@ export function DeckMap({
         onHover={onHover}
         onClick={onClick}
         views={mapView}
+        onAfterRender={handleAfterRender}
       >
         <Map mapStyle={resolvedMapStyle} />
       </DeckGL>
       {children}
+      {showPerformancePanel ? (
+        <div className="absolute top-4 right-4">
+          <PerformancePanel metrics={metrics} layerCount={layers.length} />
+        </div>
+      ) : null}
       {showStyleSwitcher ? (
         <div className="absolute right-4 bottom-8">
           <MapStyleSwitcher

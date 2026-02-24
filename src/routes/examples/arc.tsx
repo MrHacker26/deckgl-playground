@@ -41,6 +41,7 @@ function ArcExamplePage() {
       initialViewState={VIEW_STATES.india}
       layers={layers}
       showStyleSwitcher
+      showPerformancePanel
     >
       <div className="absolute top-4 left-4 flex flex-col gap-2">
         <Button

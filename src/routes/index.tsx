@@ -1,7 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { BaseButton, Button } from '@/components/ui/button'
 import { motion } from 'motion/react'
-import { CircleDot, Flame, Box, Spline, Telescope } from 'lucide-react'
+import {
+  CircleDotIcon,
+  FlameIcon,
+  BoxIcon,
+  SplineIcon,
+  TelescopeIcon,
+  NavigationIcon,
+} from 'lucide-react'
 import ExampleCard from '@/components/example-card'
 import GradientText from '@/components/ui/gradient-text'
 import { LogoIcon } from '@/components/ui/logo'
@@ -20,7 +27,7 @@ const EXAMPLES = [
       'Render thousands of GPU-accelerated points with dynamic sizing and color control.',
     path: '/examples/scatterplot',
     tag: 'Points Rendering',
-    icon: <CircleDot className="size-6" />,
+    icon: <CircleDotIcon className="size-6" />,
   },
   {
     id: 'arc',
@@ -29,7 +36,16 @@ const EXAMPLES = [
       'Visualize connections between cities with animated curved arcs across India.',
     path: '/examples/arc',
     tag: 'Connections',
-    icon: <Spline className="size-6" />,
+    icon: <SplineIcon className="size-6" />,
+  },
+  {
+    id: 'trips',
+    title: 'Trip Layer',
+    description:
+      'Animated vehicle trips with glowing trails. Real-time playback with speed and trail controls.',
+    path: '/examples/trips',
+    tag: 'Animation',
+    icon: <NavigationIcon className="size-6" />,
   },
   {
     id: 'heatmap',
@@ -38,7 +54,7 @@ const EXAMPLES = [
       'Visualize density distributions and spatial intensity patterns.',
     path: '/examples/heatmap',
     tag: 'Density Analysis',
-    icon: <Flame className="size-6" />,
+    icon: <FlameIcon className="size-6" />,
   },
   {
     id: 'column',
@@ -47,7 +63,7 @@ const EXAMPLES = [
       'Extruded 3D columns powered by WebGL for elevation-based visualization.',
     path: '/examples/column',
     tag: '3D Visualization',
-    icon: <Box className="size-6" />,
+    icon: <BoxIcon className="size-6" />,
   },
 ] as const satisfies {
   id: string
@@ -82,7 +98,7 @@ function RouteComponent() {
           </div>
 
           <div className="flex justify-center gap-4">
-            <Button size="lg" icon={<Telescope />}>
+            <Button size="lg" icon={<TelescopeIcon />}>
               Explore Examples
             </Button>
             <BaseButton variant="outline" size="lg" asChild>

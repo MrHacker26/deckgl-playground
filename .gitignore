@@ -26,5 +26,5 @@ dist-ssr
 # Ignore .vscode
 .vscode
 
-# Ingore eslint cache
+# Ignore eslint cache
 .eslintcache

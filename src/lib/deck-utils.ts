@@ -50,6 +50,13 @@ export const VIEW_STATES = {
     pitch: 0,
     bearing: 0,
   },
+  bangalore_trips: {
+    longitude: 77.5946,
+    latitude: 12.9416,
+    zoom: 12,
+    pitch: 45,
+    bearing: -10,
+  },
 } as const satisfies Record<string, Partial<MapViewState>>
 
 export const MAP_STYLES = {
@@ -119,4 +126,64 @@ export function generateArcs(count: number): ArcData[] {
     }
   }
   return arcs.sort((a, b) => b.value - a.value).slice(0, count)
+}
+
+// ─── Trips ────────────────────────────────────────────────────────────────────
+
+export const LOOP_LENGTH = 1800 // simulation seconds (30-min loop)
+
+export type TripData = {
+  path: [number, number][] // [lng, lat] only
+  timestamps: number[] // separate, monotonically increasing
+  color: [number, number, number]
+}
+
+const TRIP_COLORS: [number, number, number][] = [
+  [253, 128, 93], // orange
+  [23, 184, 190], // cyan
+  [128, 80, 255], // purple
+  [255, 214, 0], // yellow
+  [0, 200, 120], // green
+]
+
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t
+}
+
+export function generateTrips(count: number): TripData[] {
+  const bounds = {
+    minLng: 77.47,
+    maxLng: 77.72,
+    minLat: 12.86,
+    maxLat: 13.06,
+  }
+
+  const maxDuration = 400
+
+  return Array.from({ length: count }, (_, i) => {
+    const startLng = lerp(bounds.minLng, bounds.maxLng, Math.random())
+    const startLat = lerp(bounds.minLat, bounds.maxLat, Math.random())
+    const endLng = lerp(bounds.minLng, bounds.maxLng, Math.random())
+    const endLat = lerp(bounds.minLat, bounds.maxLat, Math.random())
+
+    const waypoints = 8 + Math.floor(Math.random() * 8)
+    // keep startTime early enough so trip fits within LOOP_LENGTH
+    const startTime = Math.random() * (LOOP_LENGTH - maxDuration)
+    const duration = 120 + Math.random() * (maxDuration - 120)
+
+    const path: [number, number][] = []
+    const timestamps: number[] = []
+
+    for (let w = 0; w < waypoints; w++) {
+      const t = w / (waypoints - 1)
+      const jitter = Math.sin(t * Math.PI) * 0.018
+      path.push([
+        lerp(startLng, endLng, t) + (Math.random() - 0.5) * jitter,
+        lerp(startLat, endLat, t) + (Math.random() - 0.5) * jitter,
+      ])
+      timestamps.push(startTime + t * duration)
+    }
+
+    return { path, timestamps, color: TRIP_COLORS[i % TRIP_COLORS.length] }
+  })
 }

@@ -180,6 +180,7 @@ export function DeckMap({
           <MapStyleSwitcher
             value={activeStyleKey}
             onChange={setActiveStyleKey}
+            className="mb-6"
           />
         </div>
       ) : null}

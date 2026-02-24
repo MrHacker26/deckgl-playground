@@ -8,6 +8,7 @@ import type { Layer } from '@deck.gl/core'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { WithBasicProps } from '@/lib/utils'
 import { MAP_STYLES } from '@/lib/deck-utils'
+import { MapStyleSwitcher, type MapStyleKey } from './map-style-switcher'
 
 type DeckMapProps = WithBasicProps<{
   initialViewState?: Partial<MapViewState>
@@ -15,6 +16,7 @@ type DeckMapProps = WithBasicProps<{
   onHover?: (info: PickingInfo) => void
   onClick?: (info: PickingInfo) => void
   mapStyle?: string
+  showStyleSwitcher?: boolean
   children?: React.ReactNode
 }>
 
@@ -32,12 +34,19 @@ export function DeckMap({
   onHover,
   onClick,
   mapStyle = MAP_STYLES.dark,
+  showStyleSwitcher = false,
   children,
 }: DeckMapProps) {
   const [viewState, setViewState] = useState<MapViewState>({
     ...INITIAL_VIEW_STATE,
     ...initialViewState,
   } as MapViewState)
+
+  const [activeStyleKey, setActiveStyleKey] = useState<MapStyleKey>('dark')
+
+  const resolvedMapStyle = showStyleSwitcher
+    ? MAP_STYLES[activeStyleKey]
+    : mapStyle
 
   const handleViewStateChange = useCallback(
     ({ viewState }: { viewState: MapViewState }) => {
@@ -59,9 +68,17 @@ export function DeckMap({
         onClick={onClick}
         views={mapView}
       >
-        <Map mapStyle={mapStyle} />
+        <Map mapStyle={resolvedMapStyle} />
       </DeckGL>
       {children}
+      {showStyleSwitcher ? (
+        <div className="absolute right-4 bottom-8">
+          <MapStyleSwitcher
+            value={activeStyleKey}
+            onChange={setActiveStyleKey}
+          />
+        </div>
+      ) : null}
     </div>
   )
 }
